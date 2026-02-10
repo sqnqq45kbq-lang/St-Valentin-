@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Valentine ?</title>
+  <style>
+    :root{
+      --pink:#ff4f8b;
+      --bg:#f7c7d6;
+      --card:#ffffff;
+      --txt:#111;
+      --muted:#666;
+      --no:#cfcfcf;
+    }
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      overflow:hidden;
+      color:var(--txt);
+    }
+    .card{
+      width:min(760px, 92vw);
+      background: var(--card);
+      border-radius:18px;
+      box-shadow: 0 16px 50px rgba(0,0,0,0.15);
+      padding:22px 18px 18px;
+      text-align:center;
+    }
+    .logo{
+      width:74px;
+      height:74px;
+      margin:4px auto 10px;
+      display:block;
+    }
+    h1{
+      margin: 0 0 14px;
+      font-size: clamp(22px, 4vw, 34px);
+      font-weight:800;
+    }
+
+    /* “Pages” */
+    .page{ display:none; }
+    .page.active{ display:block; }
+
+    .arena{
+      position:relative;
+      height:120px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:14px;
+      margin: 10px 0 4px;
+    }
+    button{
+      border:0;
+      padding:11px 18px;
+      border-radius:999px;
+      font-size:18px;
+      font-weight:800;
+      cursor:pointer;
+      user-select:none;
+      touch-action: manipulation;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    }
+    #yesBtn{
+      color:#fff;
+      background: var(--pink);
+    }
+    #noBtn{
+      color:#222;
+      background: var(--no);
+      position:absolute;
+      left: 62%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+      transition: left 140ms ease, top 140ms ease; /* glisse au lieu de téléporter */
+      will-change: left, top;
+    }
+
+    .hint{
+      font-size:13px;
+      color:var(--muted);
+      margin-top:2px;
+    }
+
+    .yay{
+      font-size:26px;
+      font-weight:900;
+      margin: 8px 0 10px;
+    }
+    .message{
+      text-align:left;
+      max-width: 620px;
+      margin: 0 auto;
+      font-size:18px;
+      line-height:1.35;
+      white-space:pre-wrap;
+    }
+    .signature{
+      margin-top:14px;
+      font-weight:900;
+    }
+    .gif{
+      width:min(420px, 86vw);
+      margin: 14px auto 0;
+      border-radius:14px;
+      box-shadow: 0 14px 35px rgba(0,0,0,0.18);
+      display:block;
+    }
+
+    .confetti{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+    }
+    .confetti span{
+      position:absolute;
+      top:-12px;
+      width:10px;height:14px;
+      opacity:0.95;
+      border-radius:2px;
+      animation: fall linear forwards;
+    }
+    @keyframes fall{
+      to{ transform: translateY(110vh) rotate(720deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <!-- Petit logo “tête + coeur” -->
+    <svg class="logo" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <filter id="s" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000" flood-opacity="0.12"/>
+        </filter>
+      </defs>
+      <g filter="url(#s)">
+        <circle cx="52" cy="62" r="34" fill="#e7a46a"/>
+        <polygon points="26,50 40,36 42,56" fill="#d8925c"/>
+        <polygon points="78,50 64,36 62,56" fill="#d8925c"/>
+        <circle cx="43" cy="60" r="4" fill="#111"/>
+        <circle cx="61" cy="60" r="4" fill="#111"/>
+        <path d="M50 67 Q52 71 54 67" stroke="#111" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M82 30
+                 C82 22, 92 22, 92 30
+                 C92 22, 102 22, 102 30
+                 C102 42, 92 48, 92 48
+                 C92 48, 82 42, 82 30Z"
+              fill="#ff4f8b"/>
+      </g>
+    </svg>
+
+    <!-- PAGE 1 -->
+    <div class="page active" id="pageAsk">
+      <h1>Veux-tu être ma Valentine ?</h1>
+
+      <div class="arena" id="arena">
+        <button id="yesBtn">Oui</button>
+        <button id="noBtn">Non</button>
+      </div>
+
+      <div class="hint">Essaye donc de dire non 😈</div>
+    </div>
+
+    <!-- PAGE 2 -->
+    <div class="page" id="pageYes">
+      <div class="yay">YAY!! 🎉🥳</div>
+
+      <div class="message">
+Wouuhouuu vivement que tu rentres pour faire un bon repas suppléments légère chistole (ça fait longtemps) et petite surprise !!!
+
+<span class="signature">Signé Rooster
+Bisouille 😘</span>
+      </div>
+
+      <!-- GIF (tu peux changer le lien par un autre GIF si tu veux) -->
+      <img class="gif"
+           src="https://media.giphy.com/media/26tOZ42Mg6pbTUPHW/giphy.gif"
+           alt="gif de fête">
+    </div>
+
+  </div>
+
+  <div class="confetti" id="confetti"></div>
+
+  <script>
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+    const arena = document.getElementById('arena');
+    const confetti = document.getElementById('confetti');
+
+    const pageAsk = document.getElementById('pageAsk');
+    const pageYes = document.getElementById('pageYes');
+
+    // Réglages “Non”
+    let dodges = 0;
+    const maxDodges = 999; // si tu veux qu'il se calme au bout d'un moment, mets 15-25
+
+    const rand = (min, max) => Math.random() * (max - min) + min;
+
+    function moveNoSmooth(){
+      const rect = arena.getBoundingClientRect();
+      const btn  = noBtn.getBoundingClientRect();
+      const pad = 10;
+
+      const maxX = rect.width  - btn.width  - pad;
+      const maxY = rect.height - btn.height - pad;
+
+      // positions en px dans l'arène
+      const x = rand(pad, Math.max(pad, maxX));
+      const y = rand(pad, Math.max(pad, maxY));
+
+      noBtn.style.left = x + "px";
+      noBtn.style.top  = y + "px";
+      noBtn.style.transform = "translate(0,0)";
+    }
+
+    function dodge(){
+      if (dodges >= maxDodges) return;
+      dodges++;
+
+      // Très fuyant
+      moveNoSmooth();
+    }
+
+    // Desktop: quand on approche
+    noBtn.addEventListener('mouseenter', dodge);
+
+    // Mobile: quand on touche (iPhone)
+    noBtn.addEventListener('touchstart', dodge, {passive:true});
+
+    // Si elle clique quand même “Non”
+    noBtn.addEventListener('click', () => {
+      alert("Impossible 😇");
+      dodge();
+    });
+
+    // Confettis
+    function launchConfetti(){
+      confetti.innerHTML = "";
+      const pieces = 120;
+      for (let i=0;i<pieces;i++){
+        const s = document.createElement('span');
+        s.style.left = rand(0,100) + "vw";
+        s.style.animationDuration = rand(2.5,5) + "s";
+        s.style.animationDelay = rand(0,0.35) + "s";
+        s.style.background = `hsl(${Math.floor(rand(0,360))} 90% 60%)`;
+        s.style.width = rand(6,12) + "px";
+        s.style.height = rand(8,16) + "px";
+        confetti.appendChild(s);
+      }
+    }
+
+    // Clic Oui => “page 2”
+    yesBtn.addEventListener('click', () => {
+      pageAsk.classList.remove('active');
+      pageYes.classList.add('active');
+      launchConfetti();
+    });
+  </script>
+</body>
+</html>
